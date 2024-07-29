@@ -534,7 +534,8 @@ class timthumb {
 		$sharpen = (bool) $this->param('s', DEFAULT_S);
 		$canvas_color = $this->param('cc', DEFAULT_CC);
 		$canvas_trans = (bool) $this->param('ct', '1');
-
+		$crop_percentage = (int) abs((int)$this->param('p', 0)); // New parameter for crop alignment percentage, default to 0
+		
 		// set default width and height if neither are set already
 		if ($new_width == 0 && $new_height == 0) {
 		    $new_width = (int) DEFAULT_WIDTH;
@@ -656,16 +657,16 @@ class timthumb {
 			// positional cropping!
 			if ($align) {
 				if (strpos ($align, 't') !== false) {
-					$src_y = 0;
+					$src_y = round(($height - $src_h) * ($crop_percentage / 100));
 				}
 				if (strpos ($align, 'b') !== false) {
-					$src_y = $height - $src_h;
+					$src_y = round(($height - $src_h) * (1 - $crop_percentage / 100));
 				}
 				if (strpos ($align, 'l') !== false) {
-					$src_x = 0;
+					$src_x = round(($width - $src_w) * ($crop_percentage / 100));
 				}
 				if (strpos ($align, 'r') !== false) {
-					$src_x = $width - $src_w;
+					$src_x = round(($width - $src_w) * (1 - $crop_percentage / 100));
 				}
 			}
 
